@@ -1,4 +1,6 @@
+import os
 import requests
+from dotenv import load_dotenv
 
 def get_weather(city_name, api_key):
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}&units=metric"
@@ -6,7 +8,6 @@ def get_weather(city_name, api_key):
     
     if response.status_code == 200:
         data = response.json()
-        print(data, "data")
         weather = {
             "description": data["weather"][0]["description"],
             "temperature": data["main"]["temp"],
@@ -23,8 +24,11 @@ def get_weather(city_name, api_key):
         return None
 
 def main():
+    # Load environment variables from .env file
+    load_dotenv()
+    
     city_name = input("Enter city name:")
-    api_key = '052f07d75ca0142a875a4efbf955e69a'
+    api_key = os.getenv("API_KEY")
     weather = get_weather(city_name, api_key)
     
     if weather:
